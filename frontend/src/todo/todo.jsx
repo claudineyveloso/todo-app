@@ -16,7 +16,14 @@ export default class Todo extends Component {
 
         this.handleAdd = this.handleAdd.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.refresh()
     }
+
+    refresh() {
+        axios.get(`${URL}?sort=-createdAt`)
+            .then(resp => this.setState({ ...this.state, description: '', list: resp.data }))
+    }
+
 
     handleChange(e) {
         this.setState({ ...this.state, description: e.target.value })
@@ -27,7 +34,7 @@ export default class Todo extends Component {
     handleAdd() {
         const description = this.state.description
         axios.post(URL, { description })
-            .then(resp => console.log('Funcionou!'))
+            .then(resp => this.refresh())
     }
 
     render() {
